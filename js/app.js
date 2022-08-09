@@ -1,10 +1,10 @@
 // Enemies our player must avoid
+const score = document.querySelector(".score");
 const FIELD_WIDTH = 505,
   START_X = 202,
   START_Y = 404;
-CELL_WIDTH = 101;
+CELL_WIDTH = 100;
 CELL_HEIGHT = 83;
-let count = 0;
 var Enemy = function (x, y, speed, player) {
   // Variables applied to each of our instances go here,
   // we've provided one for you to get started
@@ -12,22 +12,18 @@ var Enemy = function (x, y, speed, player) {
   this.y = y;
   this.speed = speed;
   this.player = player;
-  // The image/sprite for our enemies, this uses
-  // a helper we've provided to easily load images
+
   this.sprite = "images/enemy-bug.png";
 };
 
 const Player = function (x, y) {
   this.x = x;
   this.y = y;
+  this.score = 0;
   this.sprite = "images/char-boy.png";
 };
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+
 Enemy.prototype.update = function (dt) {
-  // You should multiply any movement by the dt parameter
-  // which will ensure the game runs at the same speed for
-  // all computers.
   if (this.x < FIELD_WIDTH) {
     this.x += this.speed * dt;
   } else {
@@ -42,27 +38,19 @@ Enemy.prototype.checkCollision = function () {
     this.player.x > this.x - CELL_WIDTH
   );
 };
-// Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function () {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
 Player.prototype.update = function () {
-  document.getElementById('score').innerHTML = 
-  `
-    <div>
-      <p>Score:<span>${count}</span></p>
-    </div>
-  `
   if (this.y > START_Y) {
     this.y = START_Y;
   }
   if (this.y < 0) {
     this.y = START_Y;
-    count++
+    this.score++;
+    score.textContent = `Score: ${this.score}`;
+    console.log(this.score);
   }
 
   if (this.x > FIELD_WIDTH - CELL_WIDTH) {
@@ -78,7 +66,8 @@ Player.prototype.render = function () {
 Player.prototype.resetPosition = function () {
   player.x = START_X;
   player.y = START_Y;
-  count = 0;
+  this.score = 0;
+  score.textContent = `Score: ${this.score}`;
 };
 Player.prototype.handleInput = function (key) {
   switch (key) {
@@ -100,18 +89,12 @@ Player.prototype.handleInput = function (key) {
   }
 };
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
 let player = new Player(START_X, START_Y),
-  enemy1 = new Enemy(0, 60, 50, player),
-  enemy2 = new Enemy(0, 143, 25, player),
-  enemy3 = new Enemy(0, 228, 77, player),
+  enemy1 = new Enemy(-100, 60, 100, player),
+  enemy2 = new Enemy(-100, 143, 25, player),
+  enemy3 = new Enemy(-100, 228, 77, player),
   allEnemies = [enemy1, enemy2, enemy3];
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
 document.addEventListener("keyup", function (e) {
   var allowedKeys = {
     37: "left",
