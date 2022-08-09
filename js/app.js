@@ -1,4 +1,3 @@
-// Enemies our player must avoid
 const score = document.querySelector(".score");
 const FIELD_WIDTH = 505,
   START_X = 202,
@@ -6,8 +5,6 @@ const FIELD_WIDTH = 505,
 CELL_WIDTH = 100;
 CELL_HEIGHT = 83;
 var Enemy = function (x, y, speed, player) {
-  // Variables applied to each of our instances go here,
-  // we've provided one for you to get started
   this.x = x;
   this.y = y;
   this.speed = speed;
